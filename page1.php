@@ -36,7 +36,7 @@
       <a class="navbar-brand" href="index.php">WebSiteName</a>
     </div>
     <ul class="nav navbar-nav">
-      <li class="active"><a href="page1.php">page 1</a></li>
+      <li class="active"><a href="index.php">page 1</a></li>
       <li><a href="page2.php.">Page 2</a></li>
 
     </ul>

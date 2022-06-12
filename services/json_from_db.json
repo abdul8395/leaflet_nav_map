@@ -1,0 +1,32 @@
+[
+    {
+       "id":"1",
+       "location_name":"Florence 1",
+       "lat":"11.3818359375",
+       "lng":"43.691707903073805"
+    },
+    {
+       "id":"2",
+       "location_name":"near ponte a Poopi",
+       "lat":"11.6015625",
+       "lng":"42.65012181368022"
+    },
+    {
+       "id":"3",
+       "location_name":"near pitigilano",
+       "lat":"13.1396484375",
+       "lng":"43.24520272203356"
+    },
+    {
+       "id":"4",
+       "location_name":"Seripola",
+       "lat":"13.4912109375",
+       "lng":"41.82045509614034"
+    },
+    {
+       "id":"5",
+       "location_name":"Morino",
+       "lat":"16.19384765625",
+       "lng":"40.39676430557203"
+    }
+ ]
