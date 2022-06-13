@@ -18,6 +18,10 @@
   <link rel="stylesheet" href="lib/full_screen/leaflet.fullscreen.css">
   <script src="lib/full_screen/Leaflet.fullscreen.min.js"></script>
 
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+
 
   <style>
     #map{
@@ -36,10 +40,21 @@
       <a class="navbar-brand" href="index.php">WebSiteName</a>
     </div>
     <ul class="nav navbar-nav">
-      <li class="active"><a href="page1.php">page 1</a></li>
+      <li class="active"><a href="index.php">Home</a></li>
+      <li ><a href="page1.php">page 1</a></li>
       <li><a href="page2.php.">Page 2</a></li>
 
     </ul>
+    <div class="navbar-form navbar-left">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Search" name="cityinput" id="cityinput">
+        <div class="input-group-btn">
+          <button class="btn btn-default" onclick="inputcity_to_latlng()" >
+            <i class="glyphicon glyphicon-search"></i>
+          </button>
+        </div>
+      </div>
+  </div>
   </div>
 </nav>
   
@@ -79,34 +94,36 @@
 var drawlat
 var drawlng
 
-var street   = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'),
-    dark  = L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png'),
-    googleSat = L.tileLayer('http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',{
-                    maxZoom: 20,
-                    subdomains:['mt0','mt1','mt2','mt3']
-                });
+var googlestreet   = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
+      maxZoom: 20,
+      subdomains:['mt0','mt1','mt2','mt3']
+      })
 
 
  map = L.map('map', {
     center: [41.8719, 12.5674],
-    layers: [street],
-    zoom: 6
+    layers: [googlestreet],
+    zoom: 6,
+    attributionControl: false,
 });
 map.zoomControl.setPosition('bottomright');
 
 
-var baseLayers = {
-    "Street": street,
-    "Satellite": googleSat,
-    "Dark": dark,
-};
+// var baseLayers = {
+//     "Street": street,
+//     "Satellite": googleSat,
+//     "Dark": dark,
+// };
 
+
+// var lgeocoder=L.Control.geocoder().addTo(map);
 
 
 
 
 
 var Points = $.getJSON("/italy_map_order/services/load_data.php", function(data) {  
+  // var Points = $.getJSON("services/json_from_db.json", function(data) {  
     console.log(data)          
      for (var i = 0; i < data.length; i++) {
       if(data[i].lat || data[i].lng != null){
@@ -186,5 +203,35 @@ var Points = $.getJSON("/italy_map_order/services/load_data.php", function(data)
     });
 }
 
-L.control.layers(baseLayers,null,{collapsed:false}).addTo(map);
+
+
+
+function inputcity_to_latlng(){
+  var inputcity=$("#cityinput").val()
+  getcitylatlng(inputcity);
+
+}
+function getcitylatlng(cityname){
+  $.get(location.protocol + '//nominatim.openstreetmap.org/search?format=json&q='+cityname, function(getdata){
+    if(getdata.length>0){
+      // alert("lat:"+ getdata[0].lat+",lng:"+getdata[0].lon);
+      var reqdata={
+        lat: getdata[0].lat,
+        lng:getdata[0].lon,
+      };
+      $.ajax({
+        type: "post",
+        url: "services/get_inputcity_latlng.php",
+        // dataType : "json",
+        data:{data:reqdata},
+        success: function (res) {
+          console.log(res)
+        }
+      });
+    }
+  });
+}
+// getcitylatlng('london');
+
+// L.control.layers(baseLayers,null,{collapsed:false}).addTo(map);
 </script>
